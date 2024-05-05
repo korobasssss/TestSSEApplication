@@ -4,27 +4,34 @@ import styles from "./page.module.css";
 import {useEffect, useState} from "react";
 
 export default function Home() {
-    const [isClicked, setIsClicked] = useState(false)
-    const [input, setInput] = useState('')
+    const [data, setData] = useState([] as any)
 
     useEffect(() => {
-        if (isClicked) {
-          if (input !== '') {
-            // todo
-          }
-        }
-    }, [isClicked]);
+        const event = new EventSource('http://localhost:8080/stream')
+
+        event.onmessage = (event) => {
+            setData(event.data);
+        };
+
+        return () => {
+            event.close();
+        };
+    }, []);
 
     return (
         <main className={styles.main}>
             <section className={styles.section}>
-                <input value={input} onChange={(event) => setInput(event.target.value)}
-                       placeholder={'Ты умничка'}/>
-                <button onClick={() => setIsClicked(true)}>
-                    Нажми на меня и больше никакого тп не будет в твоей жизни
-                </button>
+                <div>
+                    Смотри на меня и больше никакого тп не будет в твоей жизни
+                </div>
             </section>
-
+            <ul className={styles.ul}>
+                {data.map((text : string, index: number) => {
+                    return (
+                        <li key={index}>{text}</li>
+                    )
+                })}
+            </ul>
         </main>
     );
 }

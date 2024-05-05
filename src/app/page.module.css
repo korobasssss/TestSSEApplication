@@ -1,7 +1,16 @@
 .main {
+  display: flex;
+  flex-flow: column;
+  gap: 50px;
 }
 
 .section {
   display: flex;
   gap: 10px;
+}
+
+.ul {
+  display: flex;
+  flex-flow: column;
+  gap: 20px;
 }
